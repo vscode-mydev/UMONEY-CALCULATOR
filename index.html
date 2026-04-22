@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>UMoney Calculator</title>
+    <style>
+        body {
+            font-family: Arial;
+            text-align: center;
+            margin-top: 50px;
+        }
+        input, button {
+            padding: 10px;
+            margin: 10px;
+        }
+        .result {
+            margin-top: 20px;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>UMoney Bonus Calculator</h2>
+
+    <input type="number" id="deposit" placeholder="Enter deposit amount">
+    <br>
+
+    <button onclick="calculate()">Calculate</button>
+
+    <div class="result" id="output"></div>
+
+    <script>
+        function umoney(deposit, bonus = 0.03) {
+            return deposit * bonus + 2;
+        }
+
+        function calculate() {
+            let deposit = parseFloat(document.getElementById("deposit").value);
+
+            if (isNaN(deposit)) {
+                document.getElementById("output").innerHTML = "Please enter a valid amount!";
+                return;
+            }
+
+            let normalBonus = umoney(deposit);
+            let vipBonus = umoney(deposit, 0.05);
+
+            let result = `
+                If you deposit ${deposit} Rs, you get ${normalBonus.toFixed(2)} Rs bonus.<br>
+                Total amount: ${(deposit + normalBonus).toFixed(2)} Rs<br><br>
+
+                As VIP, bonus: ${vipBonus.toFixed(2)} Rs<br>
+                Total amount (VIP): ${(deposit + vipBonus).toFixed(2)} Rs
+            `;
+
+            document.getElementById("output").innerHTML = result;
+        }
+    </script>
+
+</body>
+</html>
