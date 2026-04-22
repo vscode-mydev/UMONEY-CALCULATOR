@@ -2,60 +2,137 @@
 <html>
 <head>
     <title>UMoney Calculator</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
     <style>
         body {
-            font-family: Arial;
+            margin: 0;
+            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #4facfe, #00f2fe);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            transition: 0.3s;
+        }
+
+        .container {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            width: 90%;
+            max-width: 350px;
             text-align: center;
-            margin-top: 50px;
         }
-        input, button {
+
+        h2 {
+            margin-bottom: 10px;
+        }
+
+        input {
+            width: 90%;
             padding: 10px;
-            margin: 10px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border: 1px solid #ccc;
         }
+
+        button {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 8px;
+            background: #4facfe;
+            color: white;
+            cursor: pointer;
+            width: 95%;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background: #007bff;
+        }
+
         .result {
-            margin-top: 20px;
-            font-size: 18px;
+            margin-top: 15px;
+            font-size: 16px;
+        }
+
+        .toggle {
+            margin-top: 10px;
+        }
+
+        /* Dark Mode */
+        .dark {
+            background: #121212;
+        }
+
+        .dark .container {
+            background: #1e1e1e;
+            color: white;
         }
     </style>
 </head>
+
 <body>
 
-    <h2>UMoney Bonus Calculator</h2>
+<div class="container">
+    <h2>💰 UMoney Calculator</h2>
 
-    <input type="number" id="deposit" placeholder="Enter deposit amount">
-    <br>
+    <input type="number" id="deposit" placeholder="Enter amount (₹)">
+    
+    <input type="number" id="customBonus" placeholder="Custom bonus % (optional)">
+    
+    <div class="toggle">
+        <label>
+            <input type="checkbox" id="vip"> VIP (5%)
+        </label>
+    </div>
 
     <button onclick="calculate()">Calculate</button>
 
+    <button onclick="toggleDark()">🌙 Toggle Dark Mode</button>
+
     <div class="result" id="output"></div>
+</div>
 
-    <script>
-        function umoney(deposit, bonus = 0.03) {
-            return deposit * bonus + 2;
+<script>
+    function umoney(deposit, bonus) {
+        return deposit * bonus + 2;
+    }
+
+    function calculate() {
+        let deposit = parseFloat(document.getElementById("deposit").value);
+        let custom = parseFloat(document.getElementById("customBonus").value);
+        let isVIP = document.getElementById("vip").checked;
+
+        if (isNaN(deposit)) {
+            document.getElementById("output").innerHTML = "❌ Enter valid amount!";
+            return;
         }
 
-        function calculate() {
-            let deposit = parseFloat(document.getElementById("deposit").value);
+        let bonusRate;
 
-            if (isNaN(deposit)) {
-                document.getElementById("output").innerHTML = "Please enter a valid amount!";
-                return;
-            }
-
-            let normalBonus = umoney(deposit);
-            let vipBonus = umoney(deposit, 0.05);
-
-            let result = `
-                If you deposit ${deposit} Rs, you get ${normalBonus.toFixed(2)} Rs bonus.<br>
-                Total amount you will get: ${(deposit + normalBonus).toFixed(2)} Rs<br><br>
-
-                if you become a VIP, bonus: ${vipBonus.toFixed(2)} Rs<br>
-                Total amount (VIP): ${(deposit + vipBonus).toFixed(2)} Rs
-            `;
-
-            document.getElementById("output").innerHTML = result;
+        if (!isNaN(custom)) {
+            bonusRate = custom / 100;
+        } else if (isVIP) {
+            bonusRate = 0.05;
+        } else {
+            bonusRate = 0.03;
         }
-    </script>
+
+        let bonus = umoney(deposit, bonusRate);
+
+        document.getElementById("output").innerHTML = `
+            ✅ Bonus: ₹${bonus.toFixed(2)} <br>
+            💵 Total: ₹${(deposit + bonus).toFixed(2)}
+        `;
+    }
+
+    function toggleDark() {
+        document.body.classList.toggle("dark");
+    }
+</script>
 
 </body>
 </html>
