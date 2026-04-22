@@ -13,7 +13,6 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
-            transition: 0.3s;
         }
 
         .container {
@@ -26,10 +25,6 @@
             text-align: center;
         }
 
-        h2 {
-            margin-bottom: 10px;
-        }
-
         input {
             width: 90%;
             padding: 10px;
@@ -39,7 +34,7 @@
         }
 
         button {
-            padding: 10px 15px;
+            padding: 10px;
             border: none;
             border-radius: 8px;
             background: #4facfe;
@@ -47,10 +42,7 @@
             cursor: pointer;
             width: 95%;
             font-size: 16px;
-        }
-
-        button:hover {
-            background: #007bff;
+            margin-top: 10px;
         }
 
         .result {
@@ -58,11 +50,6 @@
             font-size: 16px;
         }
 
-        .toggle {
-            margin-top: 10px;
-        }
-
-        /* Dark Mode */
         .dark {
             background: #121212;
         }
@@ -80,16 +67,13 @@
     <h2>💰 UMoney Calculator</h2>
 
     <input type="number" id="deposit" placeholder="Enter amount (₹)">
-        
-    <div class="toggle">
-        <label>
-            <input type="checkbox" id="vip"> VIP (5%)
-        </label>
-    </div>
+    
+    <label>
+        <input type="checkbox" id="vip"> VIP (5%)
+    </label>
 
     <button onclick="calculate()">Calculate</button>
-
-    <button onclick="toggleDark()">🌙 Toggle Dark Mode</button>
+    <button onclick="toggleDark()">🌙 Dark Mode</button>
 
     <div class="result" id="output"></div>
 </div>
@@ -101,7 +85,6 @@
 
     function calculate() {
         let deposit = parseFloat(document.getElementById("deposit").value);
-        let custom = parseFloat(document.getElementById("customBonus").value);
         let isVIP = document.getElementById("vip").checked;
 
         if (isNaN(deposit)) {
@@ -109,20 +92,12 @@
             return;
         }
 
-        let bonusRate;
-
-        if (!isNaN(custom)) {
-            bonusRate = custom / 100;
-        } else if (isVIP) {
-            bonusRate = 0.05;
-        } else {
-            bonusRate = 0.03;
-        }
-
+        let bonusRate = isVIP ? 0.05 : 0.03;
         let bonus = umoney(deposit, bonusRate);
 
         document.getElementById("output").innerHTML = `
-            ✅ Bonus: ₹${bonus.toFixed(2)} <br>
+            📊 Bonus Rate: ${(bonusRate * 100)}% <br>
+            💰 Bonus: ₹${bonus.toFixed(2)} <br>
             💵 Total: ₹${(deposit + bonus).toFixed(2)}
         `;
     }
